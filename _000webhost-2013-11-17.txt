@@ -1,0 +1,39 @@
+﻿Web:
+	000webhost.com
+	
+		http://members.000webhost.com	
+		yejushi@gmail.com
+		fl....##63
+
+FTP host name 	sixparker.herobo.com
+FTP user name 	a9928068
+FTP password 	fl....2###
+Folder to upload files 	public_html
+Forgot FTP password? 	Change account password
+Recommended FTP clients 	SmartFTP or FileZilla
+
+
+scoreboard.comuf.com 
+	a9851710 
+	fl...##63
+
+
+=====================================================
+
+Your website is up and running!
+
+Website sixparker.herobo.com has been successfully installed on server.
+Please delete file "default.php" from public_html folder and upload your website by using FTP or web based File Manager.
+
+- Your account information can be found on http://members.000webhost.com/
+- If you need help, please check our forums and and FAQ List or submit a ticket.
+- Please review our Terms Of Service to see what is not allowed to upload.
+
+If you are going to violate our TOS, please read this text until it's not too late!
+Do not waste your time with 000webhost.com, if you are going to upload any illegal website here! All websites are manually reviewed by humans, so if we will notice anything illegal, your account will be terminated. So don't waste your time in promoting your scams, hacking websites, or anything else malicious - your account will be terminated in 5 minutes after we will receive first abuse report or anything abusive will be detected by our staff. We also report all illegal activities to local and international authorities.
+
+Below you can see your current files in public_html folder.
+
+
+
+

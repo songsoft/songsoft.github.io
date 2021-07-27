@@ -1,7 +1,106 @@
-<h1>Hello, world! </h1>
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Six Parker</title>
+<meta http-equiv="content-type" content="text/html;charset=UTF-8" />    
+<link rel="shortcut icon" href="favicon.ico" type="image/icon">
+<link rel="icon" href="favicon.png" type="image/icon">
 
-<h1>Hello, world! </h1>
+<link rel="stylesheet" href="styles/bootstrap.min.css" media="screen" />
+<link rel="stylesheet" href="styles/easySlider.css" />
+<link rel="stylesheet" href="styles/6park.css" />
 
-<h1>Hello, world! </h1>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script type="text/javascript" src="scripts/bootstrap.min.js"></script>
+<script type="text/javascript" src="scripts/easySlider1.7.js"></script>
 
+<script type="text/javascript">  
+  $(document).ready(function () 
+	{
+  	$("#slider").easySlider({
+			auto:true, controlsShow:false,continuous:true, speed:1200
+		});
+			
+		$("#imgCircle").hover(
+				function(){$(this).animate({width:"600px"}, 1000);},        
+				function(){$(this).animate({width:"480px"}, 1000);}
+		);	
+		
+		$("#divMovie").hover(
+				function(){
+					$("#embedMovie").attr("width", "720px"); 
+					$("#embedMovie").attr("height", "400px");
+				}, 
+				function(){
+					$("#embedMovie").attr("width", "360px"); 
+					$("#embedMovie").attr("height", "240px");
+				}
+		);
 
+	  $("--#divMovie").mouseover(function(){
+			$("#embedMovie").attr("width", "800px");
+			$("#embedMovie").attr("height", "500px");
+			// $("#embedMovie").animate({width:"600px"}, 1000); // not work
+		});
+		$("--#divMovie").mouseout(function(){
+		  $("#embedMovie").attr("width", "600px");
+			// $("#embedMovie").animate({width:"480px"}, 1000); // not work
+		});
+  });	// $(document).ready(function () 
+
+</script>
+	
+</head>
+<body>
+<div class="container span10" style="text-align:center">
+<h3>野居士<small>和</small>他的小伙伴们!</h3>
+
+<div class="row-fluid">
+<ul class="inline">
+<li><a target="6park" href="http://site.6park.com/enter1/index.php">笑口常开</a></li>
+<li><a target="6park" href="http://site.6park.com/life10/index.php">文化长廊</a></li>
+<li><a target="6park" href="http://site.6park.com/gz1/">唯美贴图</a></li>
+<li><a target="6park" href="http://site.6park.com/chan10/">女性频道</a></li>
+<li><a target="6park" href="http://area.6park.com/other/index.php">缘聚灌水</a></li>
+<li><a target="6park" href="http://site.6park.com/enter5/index.php">体坛纵横</a></li>
+<li><a target="6park" href="http://site.6park.com/enter8/index.php">娱乐八卦</a></li>
+</ul>
+</div>
+<!--
+<div id="divImage" >
+	<img id="imgCircle" src="img/sixpark.jpg" style="width:480px" />
+</div>
+-->
+<center>
+<div id="slider">
+	<ul>				
+		<li><img src="img/sixpark.jpg" /></li>
+		<li><img src="img/0000.jpg" /></li>
+		<li><a target="6park" href="http://site.6park.com/chan10/"><img src="img/catt.jpg" /><br>女性频道</a></li>
+		<li><a target="6park" href="http://site.6park.com/life10/index.php"><img src="img/zaixian.jpg" /><br>文化长廊</a></li>
+		<li><a target="6park" href="http://site.6park.com/enter1/index.php"><img src="img/0003.jpg" /><br>娱乐八卦</a></li>
+		<li><a target="6park" href="http://site.6park.com/enter5/index.php"><img src="img/0005.jpg" /><br>体坛纵横</a></li>			
+		<li><a target="6park" href="http://area.6park.com/other/index.php"><img src="img/0010.jpg" /><br>缘聚灌水</a></li>
+	</ul>
+</div>
+<center>
+
+<div id="divMovie" style="text-align:center">
+<object id="objectMovie" width="360" height="240">
+<param name="movie" value="//www.youtube.com/v/zBdiFU6DgpE?version=3&amp;hl=en_US"></param>
+<param name="allowFullScreen" value="true"></param>
+<param name="allowscriptaccess" value="always"></param>
+<embed id="embedMovie" src='http://www.youtube.com/v/zBdiFU6DgpE&autoplay=1' type='application/x-shockwave-flash' width='360' height='240'></embed>
+</object>
+</div>
+
+<p>&nbsp;</p>
+
+<div class="footer" style="text-align:center">
+This site is powered by <a href="http://www.000webhost.com/"><br>
+<img src="http://www.000webhost.com/forum/images/bluesaint/misc/logo.gif" /></a> 
+</div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,312 @@
+﻿<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Six Parker</title>
+<link rel="stylesheet" href="styles/bootstrap.min.css"  media="screen" />
+<link rel="stylesheet" href="styles/6park.css" />
+<!--  jquery-ui: code.jquery.com 
+<link  href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" rel="stylesheet" />
+<script src="http://code.jquery.com/jquery-1.9.1.js" type="text/javascript" ></script>
+<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js" type="text/javascript" ></script>
+-->
+<!--  jquery-ui: local --> 
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" type="text/javascript" ></script>
+<link  href="styles/themes/ui-lightness/jquery-ui-1.10.3.custom.css" rel="stylesheet" />
+<script src="scripts/jquery-ui-1.10.3.custom.min.js" type="text/javascript" ></script>
+
+ <!-- jquery-ui: ajax.googleapis.com 
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" type="text/javascript" ></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js" type="text/javascript" ></script>
+<link  href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/themes/ui-lightness/jquery-ui.min.css" rel="stylesheet" />
+-->
+
+<script type="text/javascript" src="scripts/bootstrap.min.js"></script>
+<script type="text/javascript" src="scripts/jquery.zclip.js"></script>
+
+<script type="text/javascript" src="scripts/ViewModelGallery.js"></script>
+<script type="text/javascript" src="scripts/6park-lib.js"></script>
+<!--
+<script type="text/javascript" src="scripts/6park-config.js"></script>
+-->
+<script type="text/javascript">  
+
+  var debugMode = window.location.href.match("^file:.*-main.html") ? true : false;
+	var styleNo = (new Date()).getDay();
+	
+	// alert("window.location.href: " + window.location.href);
+	// if (debugMode) { alert("debugMode: " + debugMode);}
+
+  function showBackground()
+	{
+		var localBackgroundImageUrl = BackgroundImageArray[styleNo];
+		// alert("localBackgroundImageUrl: " + localBackgroundImageUrl);
+		// $('#tabs').css({'background-image': "url(" + localBackgroundImageUrl + ")", 'backgroundRepeat': 'repeat-x'});
+		$('#tabs').css("background", "url(" + localBackgroundImageUrl + "),Repeat");
+	} // showBackground()
+	
+  function previewFooter()
+	{
+	  // alert($('#checkboxUseFooter').prop('checked'));	// faster than .is(':checked'));
+		// alert($('#checkboxUseFooter').is(':checked'));
+		if ($('#checkboxUseFooter').prop('checked'))
+		{
+		  $("#divPreview").html(CustomFooter);
+		}
+		else
+		{
+		  $("#divPreview").html("");
+		}
+	} // showBackground()
+	
+  function InitPage() 
+	{
+		// alert("OK: configFile:" + configFile + "\n" + CustomContent + "\n" + CustomFooter);
+		$("#divCustomContent").html(CustomContent);
+		// $("#checkboxUseFooter").attr('checked', true);
+		
+		if ($("#txtHtmlOutput").val() == "") {
+			$("#txtDataSource").val("");
+		}
+		$("#txtHtmlOutput").val("");
+		$("#divError").html("&nbsp;");
+		$("#divSetInfo").html("");
+		previewFooter();
+		
+		$("#divLog").html("");
+  }	// InitPage() 
+	
+  $(document).ready(function () 
+	{
+	  var filename = window.location.pathname.split('/').pop();
+    var channelId = "0000";
+		var nickName = "";
+    var imgFile0 = "img/0000.jpg";
+    var configFile = "";
+
+		showBackground();
+		$("#tabs").tabs();
+		
+    var posDash = filename.indexOf("-");
+    if (posDash > 1) {
+      channelId = filename.substring(0, posDash);
+			nickName = filename.substring(posDash+1);
+			nickName = nickName.replace(".html", "");
+    }
+    else if (filename.match(/^\d\d+/)) {
+      channelId = filename.substring(0, 4);
+    }
+		
+    configFile = channelId + "-config.js";
+    var imgFile = "img/" + channelId + ".jpg";
+    $("#imgChannel").attr("src", imgFile);
+		if (nickName)
+		{
+		  $(document).attr('title', nickName + " @ " + $(document).attr('title')); 
+		}
+
+    if (configFile != "") {	
+      //$.getScript(configFile, function () { alert("Running " + configFile); });
+      // alert("configFile:" + configFile);
+      $.getScript(configFile)		// asynchronous
+          .done(function (script, textStatus) {
+						InitPage();
+        		$("#divLog").append("OK: getScript '" + configFile + "' " + textStatus);
+	        })
+          .fail(function (jqxhr, settings, exception) {
+					  // alert("FAIL: configFile:" + configFile);
+            $("#divLog").append("FAIL: getScript '" + configFile + "' -- Triggered ajaxError handler." + exception.textStatus);
+          });
+    }	// if (configFile != "")
+		
+
+    // $("#divGeneralInfo").append(window.location.pathname);
+    // $("#divGeneralInfo").append(window.location.href);
+
+		// Parse
+		var vmGallery;
+    $("#btnParseDataSource").click(function () 
+		{
+		  vmGallery = new ViewModelGallery(styleNo);	// use weekday as style
+			vmGallery.prefix =  $("#selectPrefix").val();
+			
+      var strDataSource = $("#txtDataSource").val();
+      // alert("strDataSource:" + strDataSource);
+      $("#divError").html("");
+      var result = ParseDataSource(strDataSource, vmGallery);
+			if (result != undefined && result != null && result.match(/ERROR:/))
+			{
+			  $("#divError").html(result);
+				return;
+			}
+
+			var htmlOutput = vmGallery.htmlOutput();
+			if (htmlOutput != "" && htmlOutput.length > 100)
+			{
+				$("#divPreview").html(htmlOutput);
+				$("#txtHtmlOutput").val(htmlOutput);
+			}
+    });	// $("#btnParseDataSource").click()
+
+		$("#btnCopyOutput").zclip({
+			  path: "scripts/ZeroClipboard.swf"
+			, copy: function() { return $("#txtHtmlOutput").val(); }
+			, beforeCopy:function(){
+						// $('#btnCopyOutput').css('background','yellow');
+						$(this).css('color','orange');
+  			}
+			, afterCopy:function(){ $(this).css('color','black'); }	// disable default alert
+		});
+	
+    $("#btnPreview").click(function () {
+      $("#divPreview").html($("#txtHtmlOutput").val());
+    });	
+
+    $("#btnClearPage").click(function () {
+      InitPage();
+    });
+
+    $('#imgChannel').mouseover(function () {
+      $("#imgChannel").attr("src", imgFile0);
+    }).mouseout(function () {
+      $("#imgChannel").attr("src", imgFile);
+    });
+
+		$("#btnAppInfo").click(function () {
+		  var appInfo = "Number Brackets:" + NumberBracketLeft + NumberBracketRight;
+			appInfo += "<br>Channels: " + CustomChannels;
+			appInfo += "<br>CustomContent: " + CustomContent;
+			$("#divAppInfo").html(appInfo);
+			$("#divAppInfo").dialog({
+					height: 300, position: [300,200], modal: true
+			});
+    });
+		
+	  $("#btnSelectOutput").click(function () {
+      $("#txtHtmlOutput").select();
+    });
+		// Test
+		$( "#date" ).datepicker();
+
+		$("#aCircleBackground").click(function() {
+			if (BackgroundImageArray != undefined && $.isArray(BackgroundImageArray))
+			{
+			  styleNo++;
+				if (styleNo > BackgroundImageArray.length)
+				{
+				  styleNo = 0;
+				}
+				showBackground();
+			}		
+		});
+		
+		$('#checkboxUseFooter').click(function() {
+				// var $this = $(this);	// $this will contain a reference to the checkbox   
+				// alert($(this).is(':checked'));
+  		  previewFooter();
+				// if ($(this).is(':checked')) {	}
+		});
+
+
+    $("#btnTest").click(function () {
+      var strDataSource = $("#txtDataSource").val();
+      $("#divError").html("");
+      var result = getImageArray_Netease_TextAreaPhotoList(strDataSource);
+      $("#divError").html(result);
+    });
+		
+    //$("button").click(function () {  $("p").slideToggle();   });
+  });	// $(document).ready(function () 
+
+</script>
+</head>
+<body>
+<div class="container" style="width:90%"> 
+<h3>发帖利器 - 让你成为留园<big>大</big>师<small>（版本0.6）</small></h3>
+<div id="divGeneralInfo" ></div>
+<div class="row-fluid">
+  <div id="divImage" class="pull-left">
+	  <a href="index.html">
+    <img id="imgChannel" src="img/0000.jpg" style="width:300px" title="点击进入：野居士和他的小伙伴们!" />
+		</a>
+  </div>
+	
+  <div id="tabs" class="pull-left">
+    <ul>
+        <li><a href="#tab-help">帮助</a></li>
+        <li><a href="#tab-CustomContent">资源</a></li>
+				<li><a href="#tab-Background">背景</a></li>
+    </ul>
+		<div id="tab-help" style="font-size:0.9em" >
+				<ol class="linenums">
+				<li>选择你的资源，显示HTML源代码</li>
+				<li>将HTML源代码复制到下面框中(Ctrl-C, Ctrl-V)</li>
+				<li>按 "处理源码" </li>
+				<li>按 “复制输出”</li>
+				<li>将输出复制到留园发帖框</li>
+				<li>按 “清除” 清除输出内容，再按 “清除” 清除源代码</li>
+				</ol>
+		</div>		
+		<div id="tab-CustomContent" style="font-size:0.9em">
+      <div id="divCustomContent" ></div>
+		</div>
+		<div id="tab-Background">
+		  <ul>
+		  <li><a id="aCircleBackground">点击更换背景</a></li>
+			<li><div class="span5 checkbox"><input type="checkbox" id="checkboxUseFooter" /> 使用签名/注脚</div></li>
+			</ul>
+		</div>
+  </div>	
+</div>
+
+<p></p>
+<form role="form" class="form-inline">
+<h4>HTML 源代码</h4>
+<textarea rows="4" id="txtDataSource" class="field" placeholder="请将图像和字幕代码复制到此框" style="width:100%"></textarea>
+<p></p>
+<div class="row-fluid" >
+<select id="selectPrefix" class="selectpicker" >
+	<option></option>
+	<option>〓〓 </option>
+	<option>★★ </option>
+	<option>●● </option>
+	<option>⊙⊙ </option>
+	<option> </option>
+</select>
+<input type="button" id="btnParseDataSource" value="处理源码" style="font-size:1.2em" />
+<!--input type="button" id="btnSelectOutput" value="Select Output" / -->
+<input type="button" id="btnCopyOutput" value="复制输出"  style="font-size:1.2em" />
+<input type="button" id="btnPreview" value="输出预览"  style="font-size:1.2em" />
+<input type="button" id="btnClearPage" value="清除" title="首按清除输出内容，次按清除源代码" />
+&nbsp;
+<input type="button" id="btnAppInfo" value="程序状态" class="pull-right" />
+<!--input type="button" id="btnTest" value="Test" /-->
+</div>
+<p></p>
+<div id="divError" class="alert-error" >&nbsp;</div>
+<h4>HTML 输出 &nbsp;<span id="divSourceName" style="font-size:0.7em;color:gray" ></span></h4>
+<textarea rows="8" id="txtHtmlOutput" class="field span11" placeholder="HTML 输出" style="width:100%" ></textarea>
+<p></p>
+<div id="divSetInfo" ></div>
+<p></p>
+<h4>预览</h4>
+<div id="divPreview" class="modal-body span10 divPreview"></div>
+<p></p>
+
+<div id="divAppInfo" class="modal-body" title="App. Info" >
+</div>
+
+
+<!--input type="text" name="date" id="date" /-->
+
+<div id="divLog" class="modal-body span10" ></div>
+</form>
+</div>	<!-- container -->
+
+<div class="footer" style="text-align:center">
+<hr style="width:100%">
+This site is powered by <a href="http://www.000webhost.com/"><br>
+<img src="http://www.000webhost.com/forum/images/bluesaint/misc/logo.gif" style="width:200px" /></a> 
+</div>
+
+</body>
+</html>
+

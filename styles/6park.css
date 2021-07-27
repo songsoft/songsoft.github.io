@@ -1,0 +1,92 @@
+.GalleryDescription
+{
+  font-size: 1.1em;
+  color: #071914;
+}
+
+#tabs {
+    width: 400px; height:180px;
+    margin-left: 20px;
+    margin-right: auto;
+    margin-top: 0px;
+    display:block;
+}
+
+.ui-widget-header {
+    font-weight: bold;
+    height:26px
+}
+
+.ui-widget-header ul {
+    height:24px;   
+}
+
+.ui-tabs .ui-tabs-nav li {
+    height:20px;
+    font-size:14px;
+}
+
+.ui-tabs .ui-tabs-nav li a {
+    position:relative;
+    top:-6px  
+}
+
+#divImage
+{
+  margin-left: 12px;
+  margin-right: 12px;
+}
+
+#selectPrefix
+{
+  width:80px;
+  height:30px;
+  background-color:#EEEEEE
+}
+
+#divError
+{
+  padding:4px;
+  font-size: 1.2em;
+  color:red;
+}
+
+.ImageTitle
+{
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+.ImageCaption
+{
+  font-size: 0.9em;
+}
+
+.DivPreview
+{
+  border:1px solid green;
+	margin:2px;
+	display:block;
+	width:95%;
+	min-height:100px
+}
+
+.DivInstruction
+{
+  font-size: 0.9em;
+  padding:16px;
+  margin:8px;
+  background-color:aliceblue;
+  border:1px solid red;
+  height: 120px;
+}
+
+.DivCustomContent
+{
+  font-size: 0.9em;
+  padding:16px;
+  margin:8px;
+  background-color:aliceblue;
+  border:1px solid red;
+  height: 120px;
+}

@@ -1,0 +1,46 @@
+﻿channelid
+0005	sports.163.com
+		http://sixparker.herobo.com/0005-letsdosports.html
+		
+0003	ent.163.com
+
+0001	news.163.com
+		war
+
+
+0025:	money.163.com
+
+0031:	game.163.com
+
+
+
+
+==================================================================
+
+今天写的程序，试试看：
+	http://sixparker.herobo.com/letsdosports0005.html
+
+可以处理以下页面：
+	http://sports.163.com/photo/?from=tj_navi
+	http://sports.163.com/photos/
+
+以后周一到周四体育版你来发吧。周五周末如果我10pm之前没发，你就来发。
+
+一会再给你车版的链接。
+
+==================================================================
+
+今天写的程序，试试看：
+	http://sixparker.herobo.com/0003starchaser.html
+
+可以处理以下页面：
+	http://news.163.com/photorank/	娱乐部分
+	http://ent.163.com/photo/?from=tj_navi#Index
+
+
+==================================================================
+
+// ◢　◣　◥　◤　?　?
+// 〔　〕　【　】　﹝　﹞ 〈　〉 ﹙　﹚　《　》　（　）｛　｝　﹛　﹜ 『　』
+// ° ○ ¤　● ◎ ⊕ ⊙　?　? ?　?　?  ? ?
+

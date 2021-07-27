@@ -1,0 +1,180 @@
+﻿<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Six Parker</title>
+<link rel="stylesheet" href="styles/bootstrap.min.css"  media="screen" />
+<link href="styles/themes/ui-lightness/jquery-ui-1.10.3.custom.css" rel="stylesheet" />
+<link rel="stylesheet" href="ls/lt-6park.css" />
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" type="text/javascript" ></script>
+<script src="scripts/jquery-ui-1.10.3.custom.min.js" type="text/javascript" ></script>
+<script src="scripts/bootstrap.min.js" type="text/javascript"></script>
+
+<script type="text/javascript" src="lt/lt-vmg.js"></script>
+<script type="text/javascript" src="lt/lt-6park.js"></script>
+<script type="text/javascript">  
+
+	var styleNo = (new Date()).getDay();
+
+  function InitPage() 
+	{
+		if ($("#txtHtmlOutput").val() == "") {
+			$("#txtDataSource").val("");
+		}
+		$("#txtHtmlOutput").val("");
+		$("#divError").html("&nbsp;");
+		$("#divLog").html("");
+  }	// InitPage() 
+	
+  $(document).ready(function () 
+	{
+	  var filename = window.location.pathname.split('/').pop();
+    var channelId = "0000";
+		var nickName = "";
+    var imgFile0 = "img/0000.jpg";
+    var configFile = "";
+
+	
+    var posDash = filename.indexOf("-");
+    if (posDash > 1) {
+      channelId = filename.substring(0, posDash);
+			nickName = filename.substring(posDash+1);
+			nickName = nickName.replace(".html", "");
+    }
+    else if (filename.match(/^\d\d+/)) {
+      channelId = filename.substring(0, 4);
+    }
+		
+    var imgFile = "img/" + channelId + ".jpg";
+    $("#imgChannel").attr("src", imgFile);
+		if (nickName)
+		{
+		  $(document).attr('title', nickName + " @ " + $(document).attr('title')); 
+		}
+
+		// Parse
+		var vmGallery;
+    $("#btnParseDataSource").click(function () 
+		{
+		  vmGallery = new ViewModelGallery(styleNo);	// use weekday as style
+			
+      var strDataSource = $("#txtDataSource").val();
+      $("#divError").html("");
+      var result = ParseDataSource(strDataSource, vmGallery);
+			if (result != undefined && result != null && result.match(/ERROR:/))
+			{
+			  $("#divError").html(result);
+				return;
+			}
+
+			var htmlOutput = vmGallery.htmlOutput();
+			if (htmlOutput != "" && htmlOutput.length > 100)
+			{
+				$("#divPreview").html(htmlOutput);
+				$("#txtHtmlOutput").val(htmlOutput);
+			}
+    });	// $("#btnParseDataSource").click()
+
+
+    $("#btnPreview").click(function () {
+      $("#divPreview").html($("#txtHtmlOutput").val());
+    });	
+
+    $("#btnClearPage").click(function () {
+      InitPage();
+    });
+
+    $('#imgChannel').mouseover(function () {
+      $("#imgChannel").attr("src", imgFile0);
+    }).mouseout(function () {
+      $("#imgChannel").attr("src", imgFile);
+    });
+
+		$("#btnAppInfo").click(function () {
+		  var appInfo = "Number Brackets:" + NumberBracketLeft + NumberBracketRight;
+			appInfo += "<br>Channels: " + CustomChannels;
+			appInfo += "<br>CustomContent: " + CustomContent;
+			$("#divAppInfo").html(appInfo);
+			$("#divAppInfo").dialog({
+					height: 300, position: [300,200], modal: true
+			});
+    });
+		
+	  $("#btnSelectOutput").click(function () {
+      $("#txtHtmlOutput").select();
+    });
+		// Test
+  });	// $(document).ready(function () 
+
+</script>
+</head>
+<body>
+<div class="container" style="width:95%"> 
+<h4>留园发帖助手<small>（版本2014-01-16）</small></h4>
+<div id="divGeneralInfo" ></div>
+<div class="row-fluid">
+  <div id="divImage" class="pull-left">
+	  <a href="index.html">
+    <img id="imgChannel" src="img/0000.jpg" style="width:240px" title="点击进入：野居士和他的小伙伴们!" />
+		</a>
+  </div>
+	
+  <div id="tabs" class="pull-right">
+		<div id="tab-help" style="font-size:0.9em" >
+		  <div class="pull-left" style="width:120px">
+		  <b>资源格式：</b><br/>
+			  <span style="font-size:0.8em">
+				图像地址<br/>
+				图像文字<br/>
+				<br/>
+				图像地址<br/>
+				图像文字<br/>
+				.....<br/>
+				</span>
+				<br/>
+			</div>
+			<div class="pull-right">			
+			  <b>处理步骤：</b><br/>
+				<span style="font-size:0.9em">
+				<ol class="linenums">
+				<li>将资源复制到下面框中(Ctrl-C, Ctrl-V)</li>
+				<li>按 "处理源码" </li>
+				<li>将HTML输出复制到留园发帖框</li>
+				<li>按 “清除” 清除输出内容，再按 “清除” 清除源代码</li>
+				</ol>
+				</span>
+				<a href="https://24.media.tumblr.com/2397c3bf79bb1bea542b364b7fce683a/tumblr_mzied5XZ4T1rsbruio1_1280.jpg">样品</a>
+	  	</div>
+		</div>		
+  </div>	
+</div>
+
+<p></p>
+<form role="form" class="form-inline">
+<h4>HTML 源代码</h4>
+<textarea rows="4" id="txtDataSource" class="field" placeholder="请将图像和字幕代码复制到此框" style="width:100%;font-size:0.9em"></textarea>
+<p></p>
+<div class="row-fluid" >
+<input type="button" id="btnParseDataSource" value="处理源码" style="font-size:1.2em" />
+<input type="button" id="btnPreview" value="输出预览"  style="font-size:1.2em" />
+<input type="button" id="btnClearPage" value="清除" title="首按清除输出内容，次按清除源代码" />
+</div>
+<p></p>
+<div id="divError" class="alert-error" >&nbsp;</div>
+<h4>HTML 输出 &nbsp;<span id="divSourceName" style="font-size:0.7em;color:gray" ></span></h4>
+<textarea rows="8" id="txtHtmlOutput" class="field span11" placeholder="HTML 输出" style="width:100%;font-size:0.9em" ></textarea>
+<p></p>
+<p></p>
+<h4>预览</h4>
+<div id="divPreview" class="divPreview"></div>
+<p></p>
+</form>
+</div>	<!-- container -->
+
+<div class="footer" style="text-align:center">
+<hr style="width:100%">
+This site is powered by <a href="http://www.000webhost.com/"><br>
+<img src="http://www.000webhost.com/forum/images/bluesaint/misc/logo.gif" style="width:200px" /></a> 
+</div>
+
+</body>
+</html>
